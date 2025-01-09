@@ -54,57 +54,55 @@ header p {
     margin-bottom: 20px;
 }
 
-header button {
-    margin-top: 10px;
+/* Token Creation Form */
+.token-creation-form {
+    margin: 40px auto;
+    width: 80%;
+    max-width: 600px;
 }
 
-/* Token List Section */
-.token-list {
-    display: flex;
-    justify-content: space-around;
-    margin: 40px 0;
-    padding: 20px;
+.form-group {
+    margin-bottom: 20px;
 }
 
-.token-card {
-    background-color: #333;
-    border-radius: 8px;
-    padding: 20px;
-    text-align: center;
-    width: 250px;
-}
-
-.token-card h3 {
-    font-size: 1.5rem;
+label {
+    font-size: 1.2rem;
     margin-bottom: 10px;
+    display: block;
 }
 
-.token-card p {
+input, select {
+    width: 100%;
+    padding: 12px;
     font-size: 1rem;
-    margin-bottom: 15px;
+    border-radius: 6px;
+    border: 1px solid #333;
 }
 
-.token-card button {
-    background-color: #00bcd4;
+input[type="number"] {
+    -moz-appearance: textfield;
 }
 
-/* Token Creation and Transfer Sections */
-.token-create, .token-transfer {
+.form-actions {
+    text-align: center;
+}
+
+.form-actions button {
+    width: 100%;
+}
+
+/* Token Deployment Section */
+.token-deployment, .token-minting, .token-address {
+    margin: 40px auto;
+    width: 80%;
+    max-width: 600px;
     background-color: #333;
-    color: white;
     padding: 30px;
     border-radius: 8px;
-    margin: 20px 0;
-    text-align: center;
 }
 
-.token-create h2, .token-transfer h2 {
-    font-size: 24px;
-    margin-bottom: 15px;
-}
-
-.token-create p, .token-transfer p {
-    font-size: 18px;
+.token-deployment input {
+    width: calc(100% - 20px);
     margin-bottom: 20px;
 }
 

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Create Token - Tokn</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/solana-web3.js/1.32.0/solana-web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@solana/spl-token@0.2.0/dist/index.iife.js"></script>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <h1>Create Your Custom Solana Token</h1>
+        <p>Define your token's attributes, mint it, and deploy liquidity to your favorite DEX.</p>
+    </header>
+
+    <!-- Token Creation Form -->
+    <section class="token-creation-form">
+        <form id="create-token-form">
+            <div class="form-group">
+                <label for="token-name">Token Name</label>
+                <input type="text" id="token-name" placeholder="Enter Token Name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="token-symbol">Token Symbol</label>
+                <input type="text" id="token-symbol" placeholder="Enter Token Symbol (e.g., ABC)" required>
+            </div>
+
+            <div class="form-group">
+                <label for="bonding-curve">Bonding Curve</label>
+                <select id="bonding-curve" required>
+                    <option value="linear">Linear</option>
+                    <option value="exponential">Exponential</option>
+                    <option value="custom">Custom</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="total-supply">Total Supply</label>
+                <input type="number" id="total-supply" placeholder="Total Supply" required>
+            </div>
+
+            <div class="form-group">
+                <label for="token-decimals">Decimals</label>
+                <input type="number" id="token-decimals" placeholder="Number of Decimals (e.g., 9)" required>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" id="create-token-btn">Create Token</button>
+            </div>
+        </form>
+    </section>
+
+    <!-- Token Deployment Section -->
+    <section class="token-deployment">
+        <h2>Deploy Liquidity to Raydium</h2>
+        <p>Select the amount of tokens to deploy liquidity to Raydium or other exchanges:</p>
+        <input type="number" id="liquidity-amount" placeholder="Amount to Deploy" required>
+        <button onclick="deployLiquidity()">Deploy Liquidity</button>
+    </section>
+
+    <!-- Token Minting -->
+    <section class="token-minting">
+        <h2>Mint Your Token</h2>
+        <button onclick="mintToken()">Mint Tokens</button>
+    </section>
+
+    <!-- Token Mint Address Section -->
+    <section class="token-address">
+        <h2>Token Mint Address</h2>
+        <p id="mint-address"></p>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Tokn. All rights reserved.</p>
+    </footer>
+
+    <script>
+        let userWallet = null;
+        let tokenMintAddress = null;
+
+        // Connect to the wallet
+        async function connectWallet() {
+            const { solana } = window;
+            if (solana && solana.isPhantom) {
+                const response = await solana.connect();
+                userWallet = response.publicKey.toString();
+                alert('Wallet connected!');
+            } else {
+                alert('Please install Phantom Wallet.');
+            }
+        }
+
+        // Handle Token Creation Form Submission
+        document.getElementById('create-token-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const tokenName = document.getElementById('token-name').value;
+            const tokenSymbol = document.getElementById('token-symbol').value;
+            const bondingCurve = document.getElementById('bonding-curve').value;
+            const totalSupply = document.getElementById('total-supply').value;
+            const decimals = document.getElementById('token-decimals').value;
+
+            // Basic validation
+            if (!tokenName || !tokenSymbol || !totalSupply || !decimals) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            try {
+                const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('mainnet-beta'), 'confirmed');
+                const mint = await solanaWeb3.Keypair.generate();
+
+                // Create the Token using the SPL Token Program
+                const token = await splToken.Token.createMint(
+                    connection,
+                    userWallet, // The creator of the token
+                    userWallet, // The owner of the mint
+                    null, // No freeze authority
+                    parseInt(decimals), // Token decimals
+                    splToken.TOKEN_PROGRAM_ID
+                );
+
+                tokenMintAddress = token.publicKey.toString();
+                document.getElementById('mint-address').textContent = tokenMintAddress;
+
+                alert(`Token "${tokenName}" created successfully!`);
+            } catch (err) {
+                console.error("Error creating token", err);
+                alert("Token creation failed.");
+            }
+        });
+
+        // Deploy Liquidity Function (Raydium/DEXes)
+        async function deployLiquidity() {
+            if (!tokenMintAddress) {
+                alert("Please create a token first.");
+                return;
+            }
+
+            const liquidityAmount = document.getElementById('liquidity-amount').value;
+            if (!liquidityAmount || isNaN(liquidityAmount)) {
+                alert("Please provide a valid liquidity amount.");
+                return;
+            }
+
+            // Placeholder: Function to deploy liquidity to Raydium or other DEXes
+            alert(`Deploying ${liquidityAmount} tokens to Raydium...`);
+            // Logic for Raydium liquidity deployment would go here...
+        }
+
+        // Mint Token Function
+        async function mintToken() {
+            if (!tokenMintAddress) {
+                alert("Please create a token first.");
+                return;
+            }
+
+            const amountToMint = prompt("Enter the amount of tokens to mint:");
+            if (amountToMint && !isNaN(amountToMint)) {
+                const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('mainnet-beta'), 'confirmed');
+                const token = new splToken.Token(connection, new solanaWeb3.PublicKey(tokenMintAddress), splToken.TOKEN_PROGRAM_ID, userWallet);
+
+                // Get the associated token account for the user
+                const tokenAccount = await token.getOrCreateAssociatedAccountInfo(userWallet);
+
+                // Mint the specified amount of tokens
+                await token.mintTo(tokenAccount.address, userWallet, [], parseInt(amountToMint) * Math.pow(10, 9));
+                alert(`Successfully minted ${amountToMint} tokens!`);
+            } else {
+                alert("Invalid mint amount.");
+            }
+        }
+    </script>
+</body>
+</html>
