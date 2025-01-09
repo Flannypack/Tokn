@@ -14,11 +14,12 @@
     <header>
         <h1>Welcome to Tokn</h1>
         <p>Create, manage, and explore your own Solana tokens.</p>
-        <button onclick="window.location.href='create.html'">Create Your Token</button>
+        <button onclick="window.location.href='create.html'" id="create-token-btn" disabled>Create Your Token</button>
 
         <!-- Connect Wallet Button -->
         <button id="connect-wallet-btn" onclick="connectWallet()">Connect Wallet</button>
         <p id="wallet-address" style="color: #00bcd4; font-size: 18px; display: none;">Wallet Connected: <span id="address"></span></p>
+        <p id="wallet-balance" style="color: #00bcd4; font-size: 18px; display: none;">Balance: <span id="balance"></span> SOL</p>
     </header>
 
     <!-- Token List Section -->
@@ -70,7 +71,7 @@
         <div class="launch-box">
             <h2>Launch Your Own Token</h2>
             <p>Ready to launch your own token on Solana? Create a custom bonding curve, deploy liquidity to decentralized exchanges like Raydium, and more.</p>
-            <button onclick="window.location.href='create.html'">Create Token</button>
+            <button onclick="window.location.href='create.html'" id="launch-token-btn" disabled>Launch Token</button>
         </div>
     </section>
 
@@ -80,30 +81,92 @@
     </footer>
 
     <script>
-        // Check if the wallet is installed
-        if (window.solana && window.solana.isPhantom) {
-            console.log("Phantom wallet detected");
-        } else {
-            alert("Please install the Phantom wallet to use this feature.");
-        }
+        let userWallet = null;
 
         // Connect to the wallet
         async function connectWallet() {
             try {
-                // Check if Phantom wallet is available
                 const { solana } = window;
 
-                // Request wallet connection
-                const response = await solana.connect();
+                // Check if Phantom wallet is installed
+                if (solana && solana.isPhantom) {
+                    const response = await solana.connect();
+                    userWallet = response.publicKey.toString();
 
-                // Get the user's public address and display it
-                const publicKey = response.publicKey.toString();
-                document.getElementById("wallet-address").style.display = "block";
-                document.getElementById("address").textContent = publicKey;
-                document.getElementById("connect-wallet-btn").textContent = "Wallet Connected";
+                    document.getElementById("wallet-address").style.display = "block";
+                    document.getElementById("address").textContent = userWallet;
+
+                    // Enable the Create Token button once wallet is connected
+                    document.getElementById("create-token-btn").disabled = false;
+                    document.getElementById("launch-token-btn").disabled = false;
+
+                    // Fetch and display wallet balance
+                    getWalletBalance();
+                } else {
+                    alert("Please install Phantom wallet.");
+                }
             } catch (err) {
                 console.error("Wallet connection failed", err);
                 alert("Connection failed. Please try again.");
+            }
+        }
+
+        // Fetch Wallet Balance (in SOL)
+        async function getWalletBalance() {
+            if (!userWallet) {
+                console.error("Wallet not connected");
+                return;
+            }
+            try {
+                const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('mainnet-beta'), 'confirmed');
+                const publicKey = new solanaWeb3.PublicKey(userWallet);
+
+                // Fetch SOL balance
+                const balance = await connection.getBalance(publicKey);
+                const solBalance = balance / solanaWeb3.LAMPORTS_PER_SOL;
+
+                document.getElementById("wallet-balance").style.display = "block";
+                document.getElementById("balance").textContent = solBalance.toFixed(3);
+            } catch (err) {
+                console.error("Error fetching balance", err);
+            }
+        }
+
+        // Enable token transfer functionality
+        async function transferTokens() {
+            if (!userWallet) {
+                alert("Please connect your wallet first.");
+                return;
+            }
+
+            // Prompt for recipient address and amount
+            const recipient = prompt("Enter recipient's wallet address:");
+            const amount = parseFloat(prompt("Enter the amount to send (in SOL):"));
+
+            if (recipient && !isNaN(amount)) {
+                try {
+                    const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('mainnet-beta'), 'confirmed');
+                    const fromWallet = new solanaWeb3.PublicKey(userWallet);
+                    const toWallet = new solanaWeb3.PublicKey(recipient);
+
+                    const transaction = new solanaWeb3.Transaction().add(
+                        solanaWeb3.SystemProgram.transfer({
+                            fromPubkey: fromWallet,
+                            toPubkey: toWallet,
+                            lamports: amount * solanaWeb3.LAMPORTS_PER_SOL, // Convert SOL to lamports
+                        })
+                    );
+
+                    const { solana } = window;
+                    const signature = await solana.signAndSendTransaction(transaction);
+                    await connection.confirmTransaction(signature);
+                    alert(`Successfully sent ${amount} SOL to ${recipient}`);
+                } catch (err) {
+                    console.error("Error sending transaction", err);
+                    alert("Transaction failed.");
+                }
+            } else {
+                alert("Invalid input. Please check the recipient address and amount.");
             }
         }
     </script>
