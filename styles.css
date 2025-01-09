@@ -1,4 +1,4 @@
-/* Global Styles */
+/* General Styles */
 * {
     margin: 0;
     padding: 0;
@@ -7,124 +7,111 @@
 }
 
 body {
-    background-color: #000;
+    background-color: #121212;
     color: #fff;
     line-height: 1.6;
-    font-size: 16px;
-    padding: 20px;
-    text-align: center;
 }
 
-/* Header Section */
-header {
-    padding: 30px 20px;
-    background-color: #111;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+h1, h2, h3 {
+    font-weight: 600;
+    color: #00bcd4;
 }
 
-header h1 {
-    font-size: 48px;
-    color: #fff;
-    margin-bottom: 10px;
+a {
+    text-decoration: none;
+    color: #00bcd4;
 }
 
-header p {
-    font-size: 18px;
-    color: #bbb;
-}
-
-/* Token List Section */
-section.token-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 40px;
-    gap: 20px;
-}
-
-.token-card {
-    background-color: #222;
-    border-radius: 8px;
-    width: 250px;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-    transition: transform 0.3s ease;
-}
-
-.token-card:hover {
-    transform: scale(1.05);
-}
-
-.token-card h3 {
-    font-size: 24px;
-    color: #fff;
-    margin-bottom: 10px;
-}
-
-.token-card p {
-    font-size: 14px;
-    color: #ccc;
-}
-
-.token-card .token-info {
-    font-size: 12px;
-    color: #999;
-    margin-top: 10px;
-}
-
-/* Buttons */
 button {
-    background-color: #333;
-    color: #fff;
+    background-color: #00bcd4;
+    color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 12px 24px;
     font-size: 16px;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 6px;
     transition: background-color 0.3s ease;
 }
 
 button:hover {
-    background-color: #444;
+    background-color: #0097a7;
+}
+
+/* Header Section */
+header {
+    text-align: center;
+    padding: 40px;
+    background-color: #1e1e1e;
+}
+
+header h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+header button {
+    margin-top: 10px;
+}
+
+/* Token List Section */
+.token-list {
+    display: flex;
+    justify-content: space-around;
+    margin: 40px 0;
+    padding: 20px;
+}
+
+.token-card {
+    background-color: #333;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    width: 250px;
+}
+
+.token-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.token-card p {
+    font-size: 1rem;
+    margin-bottom: 15px;
+}
+
+.token-card button {
+    background-color: #00bcd4;
+}
+
+/* Token Creation and Transfer Sections */
+.token-create, .token-transfer {
+    background-color: #333;
+    color: white;
+    padding: 30px;
+    border-radius: 8px;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.token-create h2, .token-transfer h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.token-create p, .token-transfer p {
+    font-size: 18px;
+    margin-bottom: 20px;
 }
 
 /* Footer Section */
 footer {
-    margin-top: 60px;
-    padding: 20px;
-    background-color: #111;
+    background-color: #1e1e1e;
     text-align: center;
-    color: #bbb;
-}
-
-footer p {
-    font-size: 14px;
-}
-
-/* Links */
-a {
+    padding: 20px;
     color: #00bcd4;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-/* Responsiveness */
-@media (max-width: 768px) {
-    .token-list {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    header h1 {
-        font-size: 36px;
-    }
-
-    header p {
-        font-size: 16px;
-    }
 }
