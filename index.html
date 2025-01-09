@@ -6,45 +6,71 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Tokn - Create and Explore Solana Tokens</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/solana-web3.js/1.32.0/solana-web3.min.js"></script>
 </head>
 <body>
 
     <!-- Header Section -->
     <header>
         <h1>Welcome to Tokn</h1>
-        <p>Create and explore Solana tokens with ease</p>
+        <p>Create, manage, and explore your own Solana tokens.</p>
+        <button onclick="window.location.href='create.html'">Create Your Token</button>
+
+        <!-- Connect Wallet Button -->
+        <button id="connect-wallet-btn" onclick="connectWallet()">Connect Wallet</button>
+        <p id="wallet-address" style="color: #00bcd4; font-size: 18px; display: none;">Wallet Connected: <span id="address"></span></p>
     </header>
 
     <!-- Token List Section -->
     <section class="token-list">
+        <h2>Featured Tokens</h2>
+        
         <div class="token-card">
             <h3>Token 1</h3>
-            <p>This is an awesome token on Solana.</p>
+            <p>This is an innovative token launched on Solana's blockchain.</p>
             <div class="token-info">
                 <p><strong>Bonding Curve:</strong> Exponential</p>
                 <p><strong>Liquidity Pool:</strong> Raydium</p>
+                <p><strong>Price:</strong> 0.5 SOL</p>
             </div>
-            <button>View Token</button>
+            <button onclick="window.location.href='token1-details.html'">View Token</button>
         </div>
 
         <div class="token-card">
             <h3>Token 2</h3>
-            <p>Next-gen token with unlimited possibilities.</p>
+            <p>A token designed for decentralized finance and governance.</p>
             <div class="token-info">
                 <p><strong>Bonding Curve:</strong> Linear</p>
                 <p><strong>Liquidity Pool:</strong> Serum</p>
+                <p><strong>Price:</strong> 0.2 SOL</p>
             </div>
-            <button>View Token</button>
+            <button onclick="window.location.href='token2-details.html'">View Token</button>
         </div>
 
         <div class="token-card">
             <h3>Token 3</h3>
-            <p>Innovative token for the decentralized web.</p>
+            <p>This token is designed for decentralized applications on Solana.</p>
             <div class="token-info">
                 <p><strong>Bonding Curve:</strong> Logarithmic</p>
                 <p><strong>Liquidity Pool:</strong> Orca</p>
+                <p><strong>Price:</strong> 0.8 SOL</p>
             </div>
-            <button>View Token</button>
+            <button onclick="window.location.href='token3-details.html'">View Token</button>
+        </div>
+    </section>
+
+    <!-- Explore & Launch Section -->
+    <section class="explore-launch">
+        <div class="explore-box">
+            <h2>Explore Tokens</h2>
+            <p>Discover a wide range of Solana-based tokens created by the Tokn community. Dive into bonding curves, liquidity pools, and more!</p>
+            <button onclick="window.location.href='explore.html'">Explore Tokens</button>
+        </div>
+
+        <div class="launch-box">
+            <h2>Launch Your Own Token</h2>
+            <p>Ready to launch your own token on Solana? Create a custom bonding curve, deploy liquidity to decentralized exchanges like Raydium, and more.</p>
+            <button onclick="window.location.href='create.html'">Create Token</button>
         </div>
     </section>
 
@@ -52,6 +78,35 @@
     <footer>
         <p>&copy; 2025 Tokn. All rights reserved. <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
     </footer>
+
+    <script>
+        // Check if the wallet is installed
+        if (window.solana && window.solana.isPhantom) {
+            console.log("Phantom wallet detected");
+        } else {
+            alert("Please install the Phantom wallet to use this feature.");
+        }
+
+        // Connect to the wallet
+        async function connectWallet() {
+            try {
+                // Check if Phantom wallet is available
+                const { solana } = window;
+
+                // Request wallet connection
+                const response = await solana.connect();
+
+                // Get the user's public address and display it
+                const publicKey = response.publicKey.toString();
+                document.getElementById("wallet-address").style.display = "block";
+                document.getElementById("address").textContent = publicKey;
+                document.getElementById("connect-wallet-btn").textContent = "Wallet Connected";
+            } catch (err) {
+                console.error("Wallet connection failed", err);
+                alert("Connection failed. Please try again.");
+            }
+        }
+    </script>
 
 </body>
 </html>
