@@ -1,121 +1,61 @@
-/* Basic layout styling */
-body {
-    font-family: Arial, sans-serif;
+/* Global Styles */
+* {
     margin: 0;
     padding: 0;
-    background-color: #f9f9f9;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
 }
 
-header {
-    display: flex;
-    justify-content: space-between;
+body {
+    background-color: #000;
+    color: #fff;
+    line-height: 1.6;
+    font-size: 16px;
     padding: 20px;
-    background-color: #24292f;
-    color: white;
+    text-align: center;
 }
 
-header .logo {
-    font-size: 1.5em;
-    font-weight: bold;
+/* Header Section */
+header {
+    padding: 30px 20px;
+    background-color: #111;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
-header nav ul {
+header h1 {
+    font-size: 48px;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 18px;
+    color: #bbb;
+}
+
+/* Token List Section */
+section.token-list {
     display: flex;
-    list-style: none;
-    gap: 20px;
-}
-
-header nav ul li a {
-    color: white;
-    text-decoration: none;
-}
-
-header .cta .btn-primary {
-    background-color: #34b7f1;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-}
-
-/* Hero Section */
-.hero {
-    text-align: center;
-    padding: 100px 20px;
-    background-color: #34b7f1;
-    color: white;
-}
-
-.hero h1 {
-    font-size: 2.5em;
-    margin-bottom: 20px;
-}
-
-.hero p {
-    font-size: 1.2em;
-    margin-bottom: 30px;
-}
-
-.hero .btn-primary, .hero .btn-secondary {
-    padding: 12px 30px;
-    font-size: 1em;
-    margin: 10px;
-    border: none;
-    cursor: pointer;
-}
-
-/* Featured Tokens Section */
-.tokens {
-    padding: 40px 20px;
-    text-align: center;
-}
-
-.token-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 40px;
     gap: 20px;
 }
 
 .token-card {
-    padding: 20px;
-    background-color: white;
+    background-color: #222;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease;
 }
 
-.token-card img {
-    width: 100%;
-    border-radius: 8px;
+.token-card:hover {
+    transform: scale(1.05);
 }
 
 .token-card h3 {
-    font-size: 1.2em;
-    margin-top: 10px;
-}
-
-.token-card p {
-    font-size: 1em;
-    color: gray;
-}
-
-.token-card .btn-small {
-    padding: 10px;
-    margin: 5px;
-    background-color: #24292f;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-/* Footer Section */
-footer {
-    background-color: #24292f;
-    color: white;
-    text-align: center;
-    padding: 20px;
-}
-
-footer a {
-    color: #34b7f1;
-    text-decoration: none;
-}
+    font-size: 24px;
+    color: #ff
