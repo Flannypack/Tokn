@@ -54,11 +54,45 @@ header p {
     margin-bottom: 20px;
 }
 
-/* Token Creation Form */
-.token-creation-form {
-    margin: 40px auto;
-    width: 80%;
+header .logo {
+    width: 80px;
+    height: auto;
+}
+
+/* Section for Tokens */
+.new-tokens, .token-management, .token-creation-form {
+    padding: 40px;
+    text-align: center;
+}
+
+.token-card {
+    display: inline-block;
+    width: 200px;
+    margin: 10px;
+    padding: 20px;
+    background-color: #333;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.token-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+}
+
+.token-card button {
+    margin-top: 10px;
+}
+
+/* Form Section */
+.token-creation-form form {
     max-width: 600px;
+    margin: auto;
+    background-color: #333;
+    padding: 20px;
+    border-radius: 8px;
 }
 
 .form-group {
@@ -79,31 +113,8 @@ input, select {
     border: 1px solid #333;
 }
 
-input[type="number"] {
-    -moz-appearance: textfield;
-}
-
-.form-actions {
-    text-align: center;
-}
-
-.form-actions button {
+button {
     width: 100%;
-}
-
-/* Token Deployment Section */
-.token-deployment, .token-minting, .token-address {
-    margin: 40px auto;
-    width: 80%;
-    max-width: 600px;
-    background-color: #333;
-    padding: 30px;
-    border-radius: 8px;
-}
-
-.token-deployment input {
-    width: calc(100% - 20px);
-    margin-bottom: 20px;
 }
 
 /* Footer Section */

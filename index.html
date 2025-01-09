@@ -4,193 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Tokn - Create and Explore Solana Tokens</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/solana-web3.js/1.32.0/solana-web3.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@solana/spl-token@0.2.0/dist/index.iife.js"></script>
+    <title>Tokn - Discover New Solana Tokens</title>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-
-    <!-- Header Section -->
     <header>
-        <h1>Welcome to Tokn</h1>
-        <p>Create, manage, and explore your own Solana tokens.</p>
-        <button onclick="window.location.href='create.html'" id="create-token-btn" disabled>Create Your Token</button>
-
-        <!-- Connect Wallet Button -->
-        <button id="connect-wallet-btn" onclick="connectWallet()">Connect Wallet</button>
-        <p id="wallet-address" style="color: #00bcd4; font-size: 18px; display: none;">Wallet Connected: <span id="address"></span></p>
-        <p id="wallet-balance" style="color: #00bcd4; font-size: 18px; display: none;">Balance: <span id="balance"></span> SOL</p>
+        <div class="header-container">
+            <img src="assets/images/logo.png" alt="Tokn Logo" class="logo">
+            <h1>Welcome to Tokn</h1>
+            <p>Create, manage, and deploy Solana tokens effortlessly!</p>
+            <button class="connect-wallet-btn" onclick="connectWallet()">Connect Wallet</button>
+        </div>
     </header>
 
-    <!-- Featured Tokens Section -->
-    <section class="token-list">
-        <h2>Featured Tokens</h2>
-        <div class="token-card">
-            <h3>Token 1</h3>
-            <p>This is an innovative token launched on Solana's blockchain.</p>
-            <button onclick="window.location.href='token1-details.html'">View Token</button>
+    <section class="new-tokens">
+        <h2>New Tokens Launched</h2>
+        <div class="tokens-list">
+            <div class="token-card">
+                <img src="assets/images/token-placeholder.png" alt="Token Image" class="token-img">
+                <h3>Token ABC</h3>
+                <p>Symbol: ABC</p>
+            </div>
+            <div class="token-card">
+                <img src="assets/images/token-placeholder.png" alt="Token Image" class="token-img">
+                <h3>Token XYZ</h3>
+                <p>Symbol: XYZ</p>
+            </div>
         </div>
-
-        <div class="token-card">
-            <h3>Token 2</h3>
-            <p>A token designed for decentralized finance and governance.</p>
-            <button onclick="window.location.href='token2-details.html'">View Token</button>
-        </div>
-
-        <div class="token-card">
-            <h3>Token 3</h3>
-            <p>This token is designed for decentralized applications on Solana.</p>
-            <button onclick="window.location.href='token3-details.html'">View Token</button>
-        </div>
+        <button onclick="window.location.href='create.html'">Create Your Token</button>
     </section>
 
-    <!-- Token Creation Section -->
-    <section class="token-create">
-        <h2>Create Your Custom Token</h2>
-        <p>Mint your own Solana-based token with a custom bonding curve and deploy liquidity.</p>
-        <button onclick="createToken()" id="create-token-btn">Create Token</button>
-    </section>
-
-    <!-- Token Transfer Section -->
-    <section class="token-transfer">
-        <h2>Transfer Tokens</h2>
-        <p>Send your custom Solana-based tokens to another wallet.</p>
-        <button onclick="transferCustomToken()" id="transfer-token-btn">Transfer Token</button>
-    </section>
-
-    <!-- Footer Section -->
     <footer>
-        <p>&copy; 2025 Tokn. All rights reserved. <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+        <p>&copy; 2025 Tokn. All rights reserved.</p>
     </footer>
 
-    <script>
-        let userWallet = null;
-
-        // Connect to the wallet
-        async function connectWallet() {
-            try {
-                const { solana } = window;
-
-                // Check if Phantom wallet is installed
-                if (solana && solana.isPhantom) {
-                    const response = await solana.connect();
-                    userWallet = response.publicKey.toString();
-
-                    document.getElementById("wallet-address").style.display = "block";
-                    document.getElementById("address").textContent = userWallet;
-
-                    // Enable the Create Token button once wallet is connected
-                    document.getElementById("create-token-btn").disabled = false;
-
-                    // Fetch and display wallet balance
-                    getWalletBalance();
-                } else {
-                    alert("Please install Phantom wallet.");
-                }
-            } catch (err) {
-                console.error("Wallet connection failed", err);
-                alert("Connection failed. Please try again.");
-            }
-        }
-
-        // Fetch Wallet Balance (in SOL)
-        async function getWalletBalance() {
-            if (!userWallet) {
-                console.error("Wallet not connected");
-                return;
-            }
-            try {
-                const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('mainnet-beta'), 'confirmed');
-                const publicKey = new solanaWeb3.PublicKey(userWallet);
-
-                // Fetch SOL balance
-                const balance = await connection.getBalance(publicKey);
-                const solBalance = balance / solanaWeb3.LAMPORTS_PER_SOL;
-
-                document.getElementById("wallet-balance").style.display = "block";
-                document.getElementById("balance").textContent = solBalance.toFixed(3);
-            } catch (err) {
-                console.error("Error fetching balance", err);
-            }
-        }
-
-        // Create Solana Token using the SPL Token Program
-        async function createToken() {
-            if (!userWallet) {
-                alert("Please connect your wallet first.");
-                return;
-            }
-
-            try {
-                const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('mainnet-beta'), 'confirmed');
-                const mint = await solanaWeb3.Keypair.generate();
-                const token = await splToken.Token.createMint(
-                    connection,
-                    userWallet,
-                    userWallet,
-                    null,
-                    9,
-                    splToken.TOKEN_PROGRAM_ID
-                );
-
-                const tokenAccount = await token.getOrCreateAssociatedAccountInfo(userWallet);
-
-                const amount = prompt("How many tokens would you like to create?");
-                if (amount && !isNaN(amount)) {
-                    await token.mintTo(
-                        tokenAccount.address, 
-                        userWallet, 
-                        [], 
-                        amount * Math.pow(10, 9) 
-                    );
-                    alert(`Successfully created and minted ${amount} tokens!`);
-                } else {
-                    alert("Invalid token amount.");
-                }
-            } catch (err) {
-                console.error("Error creating token", err);
-                alert("Token creation failed.");
-            }
-        }
-
-        // Transfer Custom Tokens
-        async function transferCustomToken() {
-            if (!userWallet) {
-                alert("Please connect your wallet first.");
-                return;
-            }
-
-            const recipient = prompt("Enter recipient's wallet address:");
-            const amount = prompt("Enter the amount to send:");
-
-            if (recipient && amount && !isNaN(amount)) {
-                try {
-                    const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('mainnet-beta'), 'confirmed');
-                    const tokenMintAddress = prompt("Enter your token's mint address:");
-                    const token = new splToken.Token(connection, new solanaWeb3.PublicKey(tokenMintAddress), splToken.TOKEN_PROGRAM_ID, userWallet);
-
-                    const recipientPublicKey = new solanaWeb3.PublicKey(recipient);
-                    const recipientTokenAccount = await token.getOrCreateAssociatedAccountInfo(recipientPublicKey);
-
-                    await token.transfer(
-                        await token.getAssociatedTokenAddress(userWallet),
-                        recipientTokenAccount.address,
-                        userWallet,
-                        [],
-                        amount * Math.pow(10, 9)
-                    );
-
-                    alert(`Successfully sent ${amount} of your custom tokens to ${recipient}`);
-                } catch (err) {
-                    console.error("Error transferring tokens", err);
-                    alert("Token transfer failed.");
-                }
-            } else {
-                alert("Please provide valid recipient address and amount.");
-            }
-        }
-    </script>
-
+    <script src="js/main.js"></script>
 </body>
 </html>
